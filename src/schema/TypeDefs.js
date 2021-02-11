@@ -12,8 +12,8 @@ const typeDefs = gql`
     books:[Book]
   }
   type Book {
-    writer_id: String
-    category_id: String
+    writer_id: Int
+    category_id: Int
     title: String
     description: String
     photo: String
@@ -22,6 +22,7 @@ const typeDefs = gql`
     id: Int
     category: String
   }
+
   type Query {
     hello: String
     users: Use
@@ -34,6 +35,15 @@ const typeDefs = gql`
   type Mutation {
     createCategory(category: String!): Categories
     updateCategory(id: Int!, category: String!): Categories
+    deleteCategory(id: Int!): Categories
+
+    createWriter(full_name: String!, email: String!, photo: String!): Writer
+    updateWriter(id: Int!, full_name: String!, email: String!, photo: String!): Writer
+    deleteWriter(id: Int!): Writer
+
+    createBook(writer_id: Int!, category_id:Int!, title: String!, description: String!, photo: String!): Book
+    updateBook(id: Int!,writer_id: Int!, category_id:Int!, title: String!, description: String!, photo: String!): Book
+    deleteBook(id: Int!): Book
   }
  
 `;
