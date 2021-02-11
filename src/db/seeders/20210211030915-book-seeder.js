@@ -4,8 +4,8 @@ faker.locale = "id_ID";
 
 const books = [...Array(10)].map((books, _index) => {
 	return {
-		writerId: faker.random.number({ min: 1, max: 10 }),
-		categoryId: faker.random.number({ min: 1, max: 5 }),
+		writer_id: faker.random.number({ min: 1, max: 10 }),
+		category_id: faker.random.number({ min: 1, max: 5 }),
 		title: faker.random.words(4),
 		description: faker.random.words(14),
 		photo: faker.image.imageUrl(),

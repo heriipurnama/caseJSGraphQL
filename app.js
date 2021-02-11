@@ -1,33 +1,20 @@
 const express = require("express");
-const { graphqlHTTP } = require("express-graphql");
-const { buildSchema } = require("graphql");
+const { ApolloServer } = require("apollo-server-express");
+const { typeDefs, resolvers } = require("./src/schema/index");
 
 const app = express();
-const port = process.env.PORT || 4000;
+app.use(express.json());
 
-const schema = buildSchema(`
-  type Query {
-    hello: String
-  }
-`);
-
-const root = {
-	hello: () => {
-		return "Hello world!";
+const server = new ApolloServer({
+	typeDefs,
+	resolvers,
+	playground: {
+		endpoint: "/codesandBoxBook",
 	},
-};
-
-app.use(express.static(__dirname + '/public/pages/index'));
-
-app.use(
-	"/graphql",
-	graphqlHTTP({
-		schema: schema,
-		rootValue: root,
-		graphiql: true,
-	})
-);
-
-app.listen(port, () => {
-	console.log(`app listening at http://localhost:${port}`);
 });
+
+server.applyMiddleware({ app });
+
+app.listen({ port: 4000 }, () =>
+	console.log("Now browse to http://localhost:4000" + server.graphqlPath )
+);
