@@ -17,6 +17,7 @@ const root = {
 	},
 };
 
+app.use(express.static(__dirname + '/public/pages/index'));
 
 app.use(
 	"/graphql",
