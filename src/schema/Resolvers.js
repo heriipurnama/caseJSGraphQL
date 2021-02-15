@@ -1,9 +1,20 @@
-const { writer, book, categorie } = require("../db/models");
+const bcrypt = require("bcrypt");
+const jsonwebtoken = require("jsonwebtoken");
+require("dotenv").config();
+
+const {
+	writer,
+	book,
+	categorie,
+	user,
+	todo,
+	todo_item,
+} = require("../db/models");
 
 const resolvers = {
 	Query: {
 		hello: () => "He!",
-		users: () => ({
+		profileAuthor: () => ({
 			name: "heriipurnama",
 			addr: "German",
 		}),
@@ -45,6 +56,7 @@ const resolvers = {
 			});
 			return resultDelete;
 		},
+
 		createWriter: async (root, { full_name, email, photo }) => {
 			let result = await writer.create({ full_name, email, photo });
 			return result;
@@ -70,11 +82,24 @@ const resolvers = {
 			});
 			return resultDelete;
 		},
-		createBook: async (root, { writer_id, category_id, title, description, photo }) => {
-			let result = await book.create({ writer_id, category_id, title, description, photo });
+
+		createBook: async (
+			root,
+			{ writer_id, category_id, title, description, photo }
+		) => {
+			let result = await book.create({
+				writer_id,
+				category_id,
+				title,
+				description,
+				photo,
+			});
 			return result;
 		},
-		updateBook: async (root, { id, writer_id, category_id, title, description, photo }) => {
+		updateBook: async (
+			root,
+			{ id, writer_id, category_id, title, description, photo }
+		) => {
 			let result = await book.update(
 				{ writer_id, category_id, title, description, photo },
 				{
@@ -94,6 +119,56 @@ const resolvers = {
 				},
 			});
 			return resultDelete;
+		},
+
+		// Handle user
+		signupAdmin: async (_, { username, email, password, role }) => {
+			let result = await user.create({
+				username,
+				email,
+				password: await bcrypt.hash(password, 10),
+				role,
+			});
+			return result;
+		},
+		signupGuest: async (_, { username, email, password }) => {
+			let result = await user.create({
+				username,
+				email,
+				password: await bcrypt.hash(password, 10),
+				role:"Guest",
+			});
+			return result;
+		},
+		signin: async (_, { username, password }) => {
+			const restUsers = await user.findOne({ where: { username } });
+
+			if (!restUsers) {
+				throw new Error("No user with that username");
+			}
+
+			const valid = await bcrypt.compare(password, restUsers.password);
+
+			if (!valid) {
+				throw new Error("Incorrect password");
+			}
+
+			const dataToken = jsonwebtoken.sign(
+				{
+					id: restUsers.id,
+					username: restUsers.username,
+					email: restUsers.email,
+					role: restUsers.role,
+				},
+				process.env.SECRET_KEY,
+				{ expiresIn: 60 * 60 }
+			);
+			return {
+				username: restUsers.username,
+				email: restUsers.email,
+				role: restUsers.role,
+				token: dataToken,
+			};
 		},
 	},
 };
