@@ -36,6 +36,17 @@ const typeDefs = gql`
     title: String
     description: String
   }
+  type TodosDetail {
+    id: Int
+    user_id: Int
+    title: String
+    description: String
+    todosItems: [TodosItems]
+  }
+  type TodosItems {
+    todos_id: Int
+    description: String
+  }
 
   type Query {
     hello: String
@@ -43,8 +54,15 @@ const typeDefs = gql`
 
     writers: [Writer]
     writerById(id: Int!): Writer
+
     categories: [Categories]
+
     books: [Book]
+
+    todoById(id: Int!): TodosDetail
+
+    todosItems: [TodosItems]
+    user:[Users]
 
   }
 

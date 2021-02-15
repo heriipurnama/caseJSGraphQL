@@ -21,11 +21,19 @@ const resolvers = {
 		writers: () => writer.findAll(),
 		books: () => book.findAll(),
 		categories: () => categorie.findAll(),
-
+		todosItems: () => todos_item.findAll(),
+		user: () => user.findAll(),
 		writerById: async (root, { id }) => {
 			let res = await writer.findByPk(id, {
 				include: book,
 			});
+			return res;
+		},
+		todoById: async (root, { id }) => {
+			let res = await todo.findByPk(id, {
+				include: todos_item,
+			});
+			
 			return res;
 		},
 	},

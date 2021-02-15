@@ -11,10 +11,11 @@ module.exports = (sequelize, DataTypes) => {
      */
 		static associate(models) {
 			// define association here
+			todos_item.belongsTo(models.todo,{foreignKey:"id"});
 		}
 	}
 	todos_item.init({
-		todos_id: DataTypes.STRING,
+		todos_id: DataTypes.INTEGER,
 		description: DataTypes.STRING
 	}, {
 		sequelize,
