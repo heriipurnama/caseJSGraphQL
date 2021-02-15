@@ -1,8 +1,57 @@
 # CaseJs
  All Case on Branch.
- ## Running  Query
-```
 
+ ## Running Query Todos Apps 
+ ```
+ # Write your query or mutation here
+# Write your query or mutation here
+# query {
+
+# }
+
+mutation {
+  # signupAdmin(username:"jogjaDev1",email:"jogjaDev@kreatiflab.id",password:"123!",role:"admin"){
+  #   username
+  #   email
+  #   password
+  #   role
+  # }
+  
+  # signupGuest(
+  #   username: "purnama"
+  #   password: "123!"
+  #   email: "sofi@kreatiflabs.id"
+  # ) {
+  #   username
+  #   role
+  # }
+  
+  signin(username:"jogjaDev1",password:"123!"){
+   token
+  }
+  # createTodo(userId:1,title:"try progres",description:"try progres desc."){
+  #   user_id
+  #   title
+  #   description
+  # }
+  
+  # updateTodo(id:16,userId:1,title:"update title",description:"update description"){
+  #   user_id
+  #   title
+  #   description
+  # }
+  
+	# deleteTodo(id:18){
+	# user_id
+	# title
+	# description
+	# }
+  
+}
+
+ ```
+## Running  Query
+```
  # Write your query or mutation here
 
 # mutation {
