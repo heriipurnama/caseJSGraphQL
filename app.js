@@ -14,7 +14,9 @@ const server = new ApolloServer({
 });
 
 server.applyMiddleware({ app });
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
+
+app.use(express.static(__dirname + "/public/pages/index"));
 
 app.listen({ port }, () =>
 	console.log(`Now browse to http://localhost:${port}` + server.graphqlPath )
