@@ -1,6 +1,5 @@
 const bcrypt = require("bcrypt");
-const jsonwebtoken = require("jsonwebtoken");
-require("dotenv").config();
+const getToken = require("../helpers/token");
 
 const {
 	writer,
@@ -8,7 +7,7 @@ const {
 	categorie,
 	user,
 	todo,
-	todo_item,
+	todos_item,
 } = require("../db/models");
 
 const resolvers = {
@@ -136,7 +135,7 @@ const resolvers = {
 				username,
 				email,
 				password: await bcrypt.hash(password, 10),
-				role:"Guest",
+				role: "Guest",
 			});
 			return result;
 		},
@@ -153,22 +152,65 @@ const resolvers = {
 				throw new Error("Incorrect password");
 			}
 
-			const dataToken = jsonwebtoken.sign(
+			const token = await getToken(restUsers);
+			return { token: token };
+		},
+
+		// create todo
+		createTodo: async (_, { userId, title, description }) => {
+			let resultTodo = await todo.create({
+				user_id: userId,
+				title,
+				description,
+			});
+
+			let todoId = resultTodo.id;
+			let todoDescription = resultTodo.description;
+
+			await todos_item.create({
+				todos_id: todoId,
+				description: todoDescription,
+			});
+
+			return resultTodo;
+		},
+		updateTodo: async (
+			root,
+			{ id, userId, title, description }
+		) => {
+			await todo.update(
+				{ user_id:userId, title, description },
 				{
-					id: restUsers.id,
-					username: restUsers.username,
-					email: restUsers.email,
-					role: restUsers.role,
-				},
-				process.env.SECRET_KEY,
-				{ expiresIn: 60 * 60 }
+					where: {
+						id: id,
+					},
+				}
 			);
-			return {
-				username: restUsers.username,
-				email: restUsers.email,
-				role: restUsers.role,
-				token: dataToken,
-			};
+
+			await todos_item.update(
+				{ todos_id:id, description},
+				{ where : {
+					todos_id:id
+				}
+				}
+			);
+			let resultUpdate = await todo.findByPk(id);
+			return resultUpdate;
+		},
+		deleteTodo: async (root, { id }) => {
+			let resultDelete = await todo.findByPk(id);
+	
+			await todo.destroy({
+				where: {
+					id: id,
+				},
+			});
+			await todos_item.destroy({
+				where: {
+					todos_id: id
+				}
+			});
+			return resultDelete;
 		},
 	},
 };

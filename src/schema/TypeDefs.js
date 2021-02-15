@@ -29,10 +29,12 @@ const typeDefs = gql`
     role: String
   }
   type UserSignin {
-    username: String
-    email: String
-    role: String
     token: String
+  }
+  type Todos {
+    user_id: Int
+    title: String
+    description: String
   }
 
   type Query {
@@ -62,7 +64,10 @@ const typeDefs = gql`
     signupAdmin(username: String!, email:String!, password: String!, role: String!): Users
     signupGuest(username: String!, email:String!, password: String!): Users
     signin(username: String!, password: String!): UserSignin
-    
+
+    createTodo(userId:Int!,title:String!,description:String!):Todos
+    updateTodo(id: Int!,userId:Int!,title:String!,description:String!): Todos
+    deleteTodo(id: Int!): Todos
   }
  
 `;

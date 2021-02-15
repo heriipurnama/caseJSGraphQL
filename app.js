@@ -8,17 +8,16 @@ app.use(express.json());
 const server = new ApolloServer({
 	typeDefs,
 	resolvers,
-	playground: {
-		endpoint: "/graphql",
-	},
+	playground: true
+
 });
 
 
-server.applyMiddleware({ app });
+server.applyMiddleware({ app, path:"/todosApi" });
 const port = process.env.PORT || 4000;
 
 app.use(express.static(__dirname + "/public/pages/index"));
 
 app.listen({ port }, () =>
-	console.log(`Now browse to http://localhost:${port}` + server.graphqlPath )
+	console.log(`Now browse to http://localhost:${port}` )
 );
