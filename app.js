@@ -8,7 +8,12 @@ app.use(express.json());
 const server = new ApolloServer({
 	typeDefs,
 	resolvers,
-	playground: true
+	introspection:true,
+	playground:{
+		settings:{
+			"schema.polling.enable":false,
+		}
+	}
 
 });
 
