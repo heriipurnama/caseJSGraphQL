@@ -9,9 +9,10 @@ const server = new ApolloServer({
 	typeDefs,
 	resolvers,
 	playground: {
-		endpoint: "/codesandBoxBook",
+		endpoint: "/graphql",
 	},
 });
+
 
 server.applyMiddleware({ app });
 const port = process.env.PORT || 4000;
