@@ -8,7 +8,7 @@ module.exports = {
 		"host" : process.env.DBHOST,
 		"dialect" : process.env.DBDIALECT, // untuk default port 5432
 		"port" : process.env.DBPORT, // untuk custom port
-		// "logging": false
+		"logging": true
 	},
 	"production" : {
 		"username" : process.env.DBUSER_PROD,
