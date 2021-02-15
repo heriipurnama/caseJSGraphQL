@@ -14,7 +14,8 @@ const server = new ApolloServer({
 });
 
 server.applyMiddleware({ app });
+const port = process.env.PORT || 3000;
 
-app.listen({ port: 4000 }, () =>
-	console.log("Now browse to http://localhost:4000" + server.graphqlPath )
+app.listen({ port }, () =>
+	console.log(`Now browse to http://localhost:${port}` + server.graphqlPath )
 );
